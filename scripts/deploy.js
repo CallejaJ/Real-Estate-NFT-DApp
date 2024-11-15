@@ -38,6 +38,8 @@ async function main() {
   )
   await escrow.deployed()
 
+  console.log(`Escrow Contract at: ${escrow.address}`)
+
   // Approve and list properties
   for (let i = 0; i < 3; i++) {
     let transaction = await realEstate.connect(seller).approve(escrow.address, i + 1)

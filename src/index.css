@@ -1,10 +1,5 @@
+/* Mantener la importación de Open Sans que ya tienes */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 :root {
   --clr-white: #FFFFFF;
@@ -13,29 +8,25 @@
   --clr-blue: #6C63FF;
   --clr-blue-2: #4c46b6;
   --clr-green: #4fb646;
+  /* Añadimos colores para el degradado */
+    --gradient-start: #6C63FF;
+    --gradient-end: #FF6B6B;
 }
 
-body {
-  margin: 0;
-  font-family: "Open Sans";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ------------------------------------------------------ */
-/* -- NAVIGATION -- */
-
+/* Mantenemos tu estructura base de navegación */
 nav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
+  background: var(--clr-white);
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav__brand {
   display: flex;
   justify-content: center;
   align-items: center;
-
   padding: 20px;
 }
 
@@ -44,307 +35,83 @@ nav {
   height: auto;
 }
 
+/* Mejoramos el título con un degradado */
 .nav__brand h1 {
-  color: var(--clr-blue);
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   font-size: 2.5em;
   font-weight: 800;
+  letter-spacing: -0.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
+.nav__brand h1:hover {
+  transform: scale(1.02);
+}
+
+/* Mejoramos los enlaces */
 .nav__links {
   display: flex;
   justify-content: center;
   align-items: center;
-
   list-style: none;
-}
-
-.nav__links li {
-  margin: 0 15px;
+  gap: 2rem;
 }
 
 .nav__links li a {
   text-decoration: none;
   color: var(--clr-black);
+  font-weight: 600;
+  font-size: 1.1rem;
+    transition: all 0.3s ease;
+  position: relative;
 }
 
-.nav__links li a:hover {
-  color: var(--clr-blue);
+.nav__links li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    transition: width 0.3s ease;
 }
 
+.nav__links li a:hover::after {
+  width: 100%;
+}
+
+/* Mejoramos el botón de conexión */
 .nav__connect {
   width: 175px;
   height: 50px;
   margin: 0 auto;
-
-  background-color: var(--clr-blue);
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: var(--clr-white);
-
   border: none;
-  border-radius: 4px;
-
+  border-radius: 8px;
   font-family: "Open Sans";
   font-size: 1.10em;
   font-weight: 600;
-
   cursor: pointer;
-  transition: all 250ms ease;
+  transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
 }
 
 .nav__connect:hover {
-  background-color: var(--clr-blue-2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
 }
 
-/* ------------------------------------------------------ */
-/* -- HEADER -- */
-
-header {
-  background-image: url("./assets/houses.png");
-  background-position: center;
-  background-size: cover;
-  min-height: 40vh;
-
-  position: relative;
+.nav__connect:active {
+  transform: translateY(0px);
 }
 
-.header__title {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  color: var(--clr-white);
-  font-size: 2em;
-
-  width: 100%;
-  text-align: center;
-}
-
-.header__search {
-  padding: 25px;
-  min-width: 40%;
-
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.header__search::placeholder {
-  font-family: "Open Sans";
-  font-size: 1.25em;
-  font-weight: 600;
-}
-
-.header__search:hover {
-  outline: 1px solid var(--clr-blue);
-}
-
-/* ------------------------------------------------------ */
-/* -- CARDS -- */
-
-.cards__section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.cards__section h3 {
-  margin: 50px 0 20px;
-}
-
-.cards {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
-  margin-top: 20px;
-}
-
-.card {
-  width: 350px;
-  height: 275px;
-
-  border: 1px solid var(--clr-black);
-  margin: 10px auto;
-
-  cursor: pointer;
-  position: relative;
-
-  transition: all 250ms ease;
-}
-
-.card:hover {
-  box-shadow: 1px 1px 5px var(--clr-grey);
-}
-
-.card__image {
-  position: absolute;
-  width: 100%;
-  z-index: -1;
-}
-
-.card__image img {
-  max-width: 100%;
-}
-
-.card__info {
-  width: 100%;
-  height: 45%;
-
-  background-color: var(--clr-white);
-
-  padding: 5px 10px;
-
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-.card__info h4 {
-  font-family: "Open Sans";
-  font-size: 1.25em;
-  font-weight: 600;
-}
-
-.card__info p {
-  font-family: "Open Sans";
-  font-size: 0.90em;
-  margin-top: 5px;
-}
-
-/* ------------------------------------------------------ */
-/* -- HOMES -- */
-
-.home {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.home__details {
-  display: grid;
-  /* grid-template-columns: repeat(2, 1fr); */
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
-  align-items: center;
-
-  width: 80%;
-  height: 70%;
-  margin: 0 auto;
-  padding: 20px;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-
-  background: var(--clr-white);
-}
-
-.home__image {
-  max-width: 500px;
-  margin: 20px auto;
-}
-
-.home__image img {
-  max-width: 100%;
-}
-
-.home__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-
-  width: 30px;
-  height: 30px;
-
-  background: transparent;
-  border: none;
-
-  cursor: pointer;
-}
-
-.home__close img {
-  width: 25px;
-  height: 25px;
-}
-
-.home__overview {
-  height: 100%;
-  margin: 0 20px;
-  padding-right: 40px;
-
-  overflow-y: scroll;
-}
-
-.home__overview h1,
-.home__overview h2,
-.home__overview hr {
-  margin: 10px auto;
-}
-
-.home__overview ul {
-  margin-left: 40px;
-}
-
-.home__buy,
-.home__contact,
-.home__owned {
-  margin: 20px 5px;
-
-  background-color: var(--clr-blue);
-  color: var(--clr-white);
-
-  border: none;
-  border-radius: 4px;
-
-  font-family: "Open Sans";
-  font-size: 1.10em;
-  font-weight: 600;
-
-  cursor: pointer;
-  transition: all 250ms ease;
-}
-
-.home__buy {
-  width: 225px;
-  height: 50px;
-}
-
-.home__buy:hover {
-  background-color: var(--clr-blue-2);
-}
-
-.home__contact {
-  width: 150px;
-  height: 50px;
-
-  background-color: transparent;
-  color: var(--clr-blue);
-
-  border: 1px solid var(--clr-blue);
-}
-
-.home__contact:hover {
-  background-color: #f7f7f7;
-  color: var(--clr-blue-2);
-}
-
-.home__owned {
-  height: 50px;
-  background-color: var(--clr-green);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  cursor: default;
-}
-
+/* Mantenemos tu media query */
 @media screen and (max-width: 768px) {
   nav {
     grid-template-columns: repeat(2, 1fr);
