@@ -15,8 +15,6 @@ function App() {
 
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    setAccount(accounts[0])
   }
 
   useEffect(() => {
@@ -25,7 +23,7 @@ function App() {
 
   return (
     <div>
-      <Navigation account={account} />
+      <Navigation account={account} setAccount={setAccount} />
 
       <div className='container'>
         <header className="header">
@@ -58,7 +56,7 @@ function App() {
         </header>
 
         <section className="featured__properties">
-          <h2>Featured Properties</h2>
+          <h3>Featured Properties</h3>
           <div className="cards__grid">
             {/* Aquí irán tus cards */}
           </div>

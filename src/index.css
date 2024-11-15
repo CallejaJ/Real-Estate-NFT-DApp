@@ -9,13 +9,21 @@
   --clr-white: #FFFFFF;
   --clr-black: #202020;
   --clr-grey: #707070;
-  --clr-blue: #6C63FF;
-  --clr-blue-2: #4c46b6;
+  --clr-blue: #00C6FF;
+    /* Azul brillante del logo */
+    --clr-blue-2: #0095FF;
+    /* Versión más oscura del azul */
+    --clr-purple: #7B44F2;
+    /* Morado del logo */
+    --clr-gold: #FFD700;
+    /* Dorado de las monedas */
   --clr-green: #4fb646;
-  /* Añadimos variables para gradientes */
-    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --gradient-hover: linear-gradient(135deg, #5457ea 0%, #7c4cf1 100%);
+  /* Gradientes actualizados con los colores del logo */
+    --gradient-primary: linear-gradient(135deg, #00C6FF 0%, #7B44F2 100%);
+    --gradient-hover: linear-gradient(135deg, #0095FF 0%, #6933E0 100%);
+    --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
 }
+
 
 body {
   margin: 0;
@@ -255,5 +263,67 @@ nav {
   .nav__connect {
     width: 140px;
     font-size: 1em;
+  }
+}
+.featured__properties {
+  padding: 4rem 0;
+  margin-bottom: 2rem;
+}
+
+.featured__properties h3 {
+  font-size: 2.5em;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  text-align: center;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cards__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Cards individuales cuando las tengas */
+.property__card {
+  background: var(--clr-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.property__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.2);
+}
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+  .featured__properties h2 {
+    font-size: 2em;
+  }
+
+  .cards__grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .featured__properties {
+    padding: 2rem 0;
+  }
+
+  .featured__properties h2 {
+    font-size: 1.8em;
+  }
+
+  .cards__grid {
+    grid-template-columns: 1fr;
   }
 }
