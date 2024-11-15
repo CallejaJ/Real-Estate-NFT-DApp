@@ -1,6 +1,10 @@
-/* Mantener la importación de Open Sans que ya tienes */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 :root {
   --clr-white: #FFFFFF;
   --clr-black: #202020;
@@ -8,19 +12,26 @@
   --clr-blue: #6C63FF;
   --clr-blue-2: #4c46b6;
   --clr-green: #4fb646;
-  /* Añadimos colores para el degradado */
-    --gradient-start: #6C63FF;
-    --gradient-end: #FF6B6B;
+  /* Añadimos variables para gradientes */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --gradient-hover: linear-gradient(135deg, #5457ea 0%, #7c4cf1 100%);
 }
 
-/* Mantenemos tu estructura base de navegación */
+body {
+  margin: 0;
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Estilos de Navigation */
 nav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
-  background: var(--clr-white);
-    padding: 1rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+    background-color: var(--clr-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav__brand {
@@ -35,38 +46,36 @@ nav {
   height: auto;
 }
 
-/* Mejoramos el título con un degradado */
 .nav__brand h1 {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  background: var(--gradient-primary);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   font-size: 2.5em;
   font-weight: 800;
-  letter-spacing: -0.5px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .nav__brand h1:hover {
   transform: scale(1.02);
 }
 
-/* Mejoramos los enlaces */
 .nav__links {
   display: flex;
   justify-content: center;
   align-items: center;
   list-style: none;
-  gap: 2rem;
+}
+
+.nav__links li {
+  margin: 0 15px;
 }
 
 .nav__links li a {
   text-decoration: none;
   color: var(--clr-black);
   font-weight: 600;
-  font-size: 1.1rem;
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
   position: relative;
 }
 
@@ -74,10 +83,10 @@ nav {
   content: '';
   position: absolute;
   width: 0;
-    height: 2px;
+  height: 2px;
     bottom: -4px;
     left: 0;
-    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  background: var(--gradient-primary);
     transition: width 0.3s ease;
 }
 
@@ -85,12 +94,11 @@ nav {
   width: 100%;
 }
 
-/* Mejoramos el botón de conexión */
 .nav__connect {
   width: 175px;
   height: 50px;
   margin: 0 auto;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  background: var(--gradient-primary);
   color: var(--clr-white);
   border: none;
   border-radius: 8px;
@@ -98,26 +106,154 @@ nav {
   font-size: 1.10em;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 250ms ease;
     box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
 }
 
 .nav__connect:hover {
+  background: var(--gradient-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+  }
+  
+  /* Contenedor principal */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Estilos del header */
+  .header {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .header__title {
+    font-size: 2.5em;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .header__subtitle {
+    color: var(--clr-grey);
+    margin-bottom: 2rem;
+  }
+  
+  /* Estilos de la búsqueda */
+  .search {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 3rem;
+  }
+  
+  .search__input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-family: "Open Sans";
+    transition: all 250ms ease;
+    background-color: #f8f9fa;
+  }
+  
+  .search__input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+  
+  .search__button {
+    padding: 0 2rem;
+    background: var(--gradient-primary);
+    color: var(--clr-white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Open Sans";
+    font-weight: 600;
+    transition: all 250ms ease;
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
+  }
+  
+  .search__button:hover {
+    background: var(--gradient-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
 }
 
-.nav__connect:active {
-  transform: translateY(0px);
+/* Estilos de las estadísticas */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 3rem;
 }
 
-/* Mantenemos tu media query */
+.stat__item {
+  text-align: center;
+}
+
+.stat__number {
+  display: block;
+  font-size: 2em;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: transform 0.3s ease;
+}
+
+.stat__item:hover .stat__number {
+  transform: scale(1.05);
+}
+
+.stat__label {
+  color: var(--clr-grey);
+}
+
+/* Responsive */
 @media screen and (max-width: 768px) {
   nav {
     grid-template-columns: repeat(2, 1fr);
+    padding: 1rem;
   }
 
   .nav__links {
     display: none;
+  }
+.header__title {
+  font-size: 2em;
+}
+
+.stats {
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.search {
+  flex-direction: column;
+}
+}
+
+@media screen and (max-width: 480px) {
+  .nav__brand img {
+    max-width: 100px;
+  }
+
+  .nav__brand h1 {
+    font-size: 1.8em;
+  }
+
+  .nav__connect {
+    width: 140px;
+    font-size: 1em;
   }
 }

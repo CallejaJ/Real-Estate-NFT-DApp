@@ -11,7 +11,6 @@ const Navigation = ({ account, setAccounts }) => {
 
             <div className='nav__brand'>
                 <img src={dapp_logo} alt="Logo" />
-                {/* <h1>Dapp</h1> */}
             </div>
 
             <button
