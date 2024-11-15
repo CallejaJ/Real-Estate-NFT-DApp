@@ -14,11 +14,44 @@ function App() {
   const [account, setAccount] = useState(null)
 
   const loadBlockchainData = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+      // Solicitar cuentas al cargar
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const account = ethers.utils.getAddress(accounts[0]);
+      setAccount(account);
+
+      // Escuchar cambios de cuenta
+      window.ethereum.on('accountsChanged', async (accounts) => {
+        if (accounts.length > 0) {
+          const account = ethers.utils.getAddress(accounts[0]);
+          setAccount(account);
+        } else {
+          setAccount(null);
+        }
+      });
+
+      // Opcional: Escuchar desconexión
+      window.ethereum.on('disconnect', () => {
+        setAccount(null);
+      });
+
+    } catch (error) {
+      console.error("Error loading blockchain data:", error);
+    }
   }
 
   useEffect(() => {
     loadBlockchainData();
+
+    // Cleanup de los event listeners cuando el componente se desmonta
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('accountsChanged', () => { });
+        window.ethereum.removeListener('disconnect', () => { });
+      }
+    };
   }, []);
 
   return (
@@ -30,14 +63,7 @@ function App() {
           <h1 className="header__title">Discover, Buy and Sell Real Estate NFTs</h1>
           <p className="header__subtitle">The future of real estate investment is here</p>
 
-          <div className="search">
-            <input
-              type="text"
-              className="search__input"
-              placeholder="Search by location, property type, or features..."
-            />
-            <button className="search__button">Search</button>
-          </div>
+          <Search />
 
           <div className="stats">
             <div className="stat__item">

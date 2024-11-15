@@ -1,13 +1,13 @@
 const Search = () => {
     return (
-        <header>
-            <h2 className="header__title">Search it. Explore it. Buy it.</h2>
+        <div className="search">
             <input
                 type="text"
-                className="header__search"
-                placeholder="Enter an address, neighborhood, city, or ZIP code"
+                className="search__input"
+                placeholder="Search by location, property type, or features..."
             />
-        </header>
+            <button className="search__button">Search</button>
+        </div>
     );
 }
 
