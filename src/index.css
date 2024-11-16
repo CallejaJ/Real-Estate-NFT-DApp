@@ -16,7 +16,7 @@
   --clr-gold: #FFD700;
   --clr-green: #4fb646;
   --gradient-primary: linear-gradient(135deg, #00C6FF 0%, #7B44F2 100%);
-    --gradient-hover: linear-gradient(135deg, #0095FF 0%, #6933E0 100%);
+  --gradient-hover: linear-gradient(135deg, #0095FF 0%, #6933E0 100%);
     --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
 }
 
@@ -40,7 +40,7 @@ nav {
   align-items: center;
   padding: 1rem 2rem;
   background-color: var(--clr-white);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav__brand {
@@ -58,7 +58,7 @@ nav {
 .nav__brand h1 {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
-    background-clip: text;
+  background-clip: text;
     color: transparent;
   font-size: 2.5em;
   font-weight: 800;
@@ -94,7 +94,7 @@ nav {
   width: 0;
   height: 2px;
   bottom: -4px;
-    left: 0;
+  left: 0;
   background: var(--gradient-primary);
   transition: width 0.3s ease;
 }
@@ -122,8 +122,9 @@ nav {
 .nav__connect:hover {
   background: var(--gradient-hover);
   transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
   }
+
 /* Header */
 .header {
   text-align: center;
@@ -144,6 +145,7 @@ nav {
   color: var(--clr-grey);
   margin-bottom: 2rem;
 }
+
 /* Search */
 .search {
   max-width: 600px;
@@ -240,52 +242,89 @@ nav {
 .cards__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+  gap: 2rem;
     padding: 1rem 0;
 }
 
 .property__card {
   background: var(--clr-white);
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
   height: fit-content;
+  border: 1px solid #e5e7eb;
 }
 
 .property__card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.2);
+  transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Card Image */
 .property__card img {
   width: 100%;
-  height: 160px;
+  height: 200px;
   object-fit: cover;
 }
 
-/* Card Content */
-.property__card-content {
-  padding: 1rem;
-}
-
-.property__card-price {
-  font-weight: bold;
+/* Price Tag */
+.property__price {
+  margin: 12px 0 8px 16px;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--clr-black);
-  font-size: 1.25em;
-  margin-bottom: 0.5rem;
 }
 
-.property__card-details {
+/* Property Details */
+.property__details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  margin-bottom: 8px;
   color: var(--clr-grey);
-  font-size: 0.9em;
-  margin-bottom: 0.5rem;
 }
 
-.property__card-location {
+.property__details span {
+  display: flex;
+  align-items: center;
+}
+
+.property__details strong {
+  color: var(--clr-black);
+  margin-right: 4px;
+}
+
+.property__details .separator {
+  color: #e5e7eb;
+  margin: 0 4px;
+}
+
+/* Property Address */
+.property__address {
+  padding: 0 16px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
   color: var(--clr-grey);
-  font-size: 0.9em;
+}
+
+/* More Info Button */
+.more-info-btn {
+  margin: 0 16px 16px;
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2563eb;
+  background-color: #eff6ff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.more-info-btn:hover {
+  background-color: #dbeafe;
 }
 
 /* Media Queries */
@@ -295,16 +334,17 @@ nav {
     gap: 1rem;
   }
 }
+
 @media screen and (max-width: 768px) {
   nav {
-      grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
       padding: 1rem;
     }
-  
+    
     .nav__links {
       display: none;
     }
-  
+    
     .header__title {
     font-size: 2em;
   }
@@ -317,9 +357,12 @@ nav {
         .search {
           flex-direction: column;
         }
-        }
-    
-        @media screen and (max-width: 640px) {
+.featured__properties h3 {
+  font-size: 2em;
+}
+}
+
+@media screen and (max-width: 640px) {
   .cards__grid {
     grid-template-columns: 1fr;
     padding: 0 1rem;
@@ -328,17 +371,18 @@ nav {
 
 @media screen and (max-width: 480px) {
   .nav__brand img {
-      max-width: 100px;
+    max-width: 100px;
     }
-  
+    
     .nav__brand h1 {
       font-size: 1.8em;
     }
-  
+    
     .nav__connect {
       width: 140px;
       font-size: 1em;
     }
+
   .featured__properties {
     padding: 2rem 0;
   }
