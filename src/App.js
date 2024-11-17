@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 // Components
 import Navigation from './components/Navigation';
 import Search from './components/Search';
-import PropertyGrid from './components/PropertyGrid';
+import Home from './components/Home';
 
 // ABIs
 import RealEstate from './abis/RealEstate.json';
@@ -16,58 +16,64 @@ import config from './config.json';
 function App() {
   const [provider, setProvider] = useState(null);
   const [escrow, setEscrow] = useState(null);
-  const [homes, setHomes] = useState([]);
   const [account, setAccount] = useState(null);
+  const [homes, setHomes] = useState([]);
+  const [home, setHome] = useState(null);
   const [network, setNetwork] = useState(null);
+  const [toggle, setToggle] = useState(false);
+
+  const togglePop = (home) => {
+    setHome(home);
+    setToggle(!toggle);
+  };
 
   const loadBlockchainData = async () => {
     try {
-      if (window.ethereum) {
-        // Connect to blockchain
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        setProvider(provider);
-
-        // Get network
-        const network = await provider.getNetwork();
-        setNetwork(network);
-
-        // Get contract instances
-        const realEstate = new ethers.Contract(
-          config[network.chainId].realEstate.address,
-          RealEstate,
-          provider
-        );
-
-        const escrow = new ethers.Contract(
-          config[network.chainId].escrow.address,
-          Escrow,
-          provider
-        );
-        setEscrow(escrow);
-
-        // Load homes
-        const totalSupply = await realEstate.totalSupply();
-        const homes = [];
-
-        for (let i = 1; i <= totalSupply; i++) {
-          const uri = await realEstate.tokenURI(i);
-          const response = await fetch(uri);
-          const metadata = await response.json();
-          homes.push(metadata);
-        }
-
-        setHomes(homes);
-
-        // Setup account change listener
-        window.ethereum.on('accountsChanged', async () => {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const account = ethers.utils.getAddress(accounts[0]);
-          setAccount(account);
-        });
-
-      } else {
+      if (!window.ethereum) {
         console.error('Please install MetaMask!');
+        return;
       }
+
+      // Connect to blockchain
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      setProvider(provider);
+
+      // Get network
+      const network = await provider.getNetwork();
+      setNetwork(network);
+
+      // Get contract instances
+      const realEstate = new ethers.Contract(
+        config[network.chainId].realEstate.address,
+        RealEstate,
+        provider
+      );
+
+      const escrow = new ethers.Contract(
+        config[network.chainId].escrow.address,
+        Escrow,
+        provider
+      );
+      setEscrow(escrow);
+
+      // Load homes
+      const totalSupply = await realEstate.totalSupply();
+      const homes = [];
+
+      for (let i = 1; i <= totalSupply; i++) {
+        const uri = await realEstate.tokenURI(i);
+        const response = await fetch(uri);
+        const metadata = await response.json();
+        homes.push(metadata);
+      }
+
+      setHomes(homes);
+
+      // Get account
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const account = ethers.utils.getAddress(accounts[0]);
+      setAccount(account);
+
     } catch (error) {
       console.error('Error loading blockchain data:', error);
     }
@@ -76,10 +82,25 @@ function App() {
   useEffect(() => {
     loadBlockchainData();
 
+    // Setup account change listener
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', async () => {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = ethers.utils.getAddress(accounts[0]);
+        setAccount(account);
+      });
+
+      // Setup network change listener
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload();
+      });
+    }
+
     // Cleanup function
     return () => {
       if (window.ethereum) {
         window.ethereum.removeListener('accountsChanged', () => { });
+        window.ethereum.removeListener('chainChanged', () => { });
       }
     };
   }, []);
@@ -113,15 +134,57 @@ function App() {
 
         <main>
           <section className="featured__properties">
-            <PropertyGrid
-              homes={homes}
-              provider={provider}
-              escrow={escrow}
-              account={account}
-            />
+            <div className="cards__grid">
+              {homes.map((home, index) => (
+                <div className="property__card" key={index} onClick={() => togglePop(home)}>
+                  <div className="relative w-full overflow-hidden">
+                    <img
+                      src={home.image}
+                      alt="Property"
+                      className="w-full object-cover"
+                    />
+                  </div>
+
+                  <div className="property__price">
+                    {home.attributes[0].value} ETH
+                  </div>
+
+                  <div className="property__details">
+                    <span><strong>{home.attributes[2].value}</strong> bed</span>
+                    <span className="separator">|</span>
+                    <span><strong>{home.attributes[3].value}</strong> bath</span>
+                    <span className="separator">|</span>
+                    <span><strong>{home.attributes[4].value}</strong> sqft</span>
+                  </div>
+
+                  <div className="property__address">
+                    {home.address}
+                  </div>
+
+                  <button
+                    className="more-info-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      togglePop(home);
+                    }}
+                  >
+                    More Info
+                  </button>
+                </div>
+              ))}
+            </div>
           </section>
         </main>
       </div>
+
+      {toggle && (
+        <Home
+          home={home}
+          provider={provider}
+          escrow={escrow}
+          togglePop={togglePop}
+        />
+      )}
     </div>
   );
 }
