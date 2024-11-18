@@ -21,6 +21,8 @@ function App() {
   const [home, setHome] = useState(null);
   const [network, setNetwork] = useState(null);
   const [toggle, setToggle] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const togglePop = (home) => {
     setHome(home);
@@ -28,10 +30,12 @@ function App() {
   };
 
   const loadBlockchainData = async () => {
+    setIsLoading(true);
+    setError(null);
+
     try {
       if (!window.ethereum) {
-        console.error('Please install MetaMask!');
-        return;
+        throw new Error('Please install MetaMask!');
       }
 
       // Connect to blockchain
@@ -76,13 +80,15 @@ function App() {
 
     } catch (error) {
       console.error('Error loading blockchain data:', error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     loadBlockchainData();
 
-    // Setup account change listener
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', async () => {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -90,13 +96,11 @@ function App() {
         setAccount(account);
       });
 
-      // Setup network change listener
       window.ethereum.on('chainChanged', () => {
         window.location.reload();
       });
     }
 
-    // Cleanup function
     return () => {
       if (window.ethereum) {
         window.ethereum.removeListener('accountsChanged', () => { });
@@ -133,46 +137,59 @@ function App() {
         </header>
 
         <main>
-          <section className="featured__properties">
-            <div className="cards__grid">
-              {homes.map((home, index) => (
-                <div className="property__card" key={index} onClick={() => togglePop(home)}>
-                  <div className="relative w-full overflow-hidden">
-                    <img
-                      src={home.image}
-                      alt="Property"
-                      className="w-full object-cover"
-                    />
-                  </div>
-
-                  <div className="property__price">
-                    {home.attributes[0].value} ETH
-                  </div>
-
-                  <div className="property__details">
-                    <span><strong>{home.attributes[2].value}</strong> bed</span>
-                    <span className="separator">|</span>
-                    <span><strong>{home.attributes[3].value}</strong> bath</span>
-                    <span className="separator">|</span>
-                    <span><strong>{home.attributes[4].value}</strong> sqft</span>
-                  </div>
-
-                  <div className="property__address">
-                    {home.address}
-                  </div>
-
-                  <button
-                    className="more-info-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      togglePop(home);
-                    }}
-                  >
-                    More Info
-                  </button>
-                </div>
-              ))}
+          {error && (
+            <div className="error-message">
+              {error}
             </div>
+          )}
+
+          <section className="featured__properties">
+            {isLoading ? (
+              <div className="loading">
+                <div className="loading-spinner"></div>
+                <p>Loading properties...</p>
+              </div>
+            ) : (
+                <div className="cards__grid">
+                  {homes.map((home, index) => (
+                    <div className="property__card" key={index} onClick={() => togglePop(home)}>
+                      <div className="relative w-full overflow-hidden">
+                        <img
+                          src={home.image}
+                          alt="Property"
+                          className="w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="property__price">
+                        {home.attributes[0].value} ETH
+                      </div>
+
+                      <div className="property__details">
+                        <span><strong>{home.attributes[2].value}</strong> bed</span>
+                        <span className="separator">|</span>
+                        <span><strong>{home.attributes[3].value}</strong> bath</span>
+                        <span className="separator">|</span>
+                        <span><strong>{home.attributes[4].value}</strong> sqft</span>
+                      </div>
+
+                      <div className="property__address">
+                        {home.address}
+                      </div>
+
+                      <button
+                        className="more-info-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          togglePop(home);
+                        }}
+                      >
+                        More Info
+                      </button>
+                    </div>
+                  ))}
+                </div>
+            )}
           </section>
         </main>
       </div>

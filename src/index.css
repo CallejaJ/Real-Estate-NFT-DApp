@@ -248,7 +248,7 @@ nav {
 
 .property__card {
   background: var(--clr-white);
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -262,14 +262,12 @@ nav {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Card Image */
 .property__card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
 }
 
-/* Price Tag */
 .property__price {
   margin: 12px 0 8px 16px;
   font-size: 1.25rem;
@@ -277,7 +275,6 @@ nav {
   color: var(--clr-black);
 }
 
-/* Property Details */
 .property__details {
   display: flex;
   align-items: center;
@@ -302,7 +299,6 @@ nav {
   margin: 0 4px;
 }
 
-/* Property Address */
 .property__address {
   padding: 0 16px;
   margin-bottom: 16px;
@@ -310,7 +306,6 @@ nav {
   color: var(--clr-grey);
 }
 
-/* More Info Button */
 .more-info-btn {
   margin: 0 16px 16px;
   padding: 6px 12px;
@@ -328,127 +323,290 @@ nav {
   background-color: #dbeafe;
 }
 
-/* Home Modal */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--clr-blue);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #dc2626;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+/* Modal principal */
 .home {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding: 20px;
   z-index: 1000;
 }
 
 .home__details {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  position: relative;
-  max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.home__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
   background: white;
-  border-radius: 50%;
-  padding: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  animation: modalFadeIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.home__close:hover {
-  transform: scale(1.1);
-}
-
+/* Sección de imagen */
 .home__image {
-  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin-bottom: 0;
+  overflow: hidden;
 }
 
 .home__image img {
   width: 100%;
-  height: auto;
-  border-radius: 8px;
+  height: 100%;
   object-fit: cover;
 }
-/* Media Queries */
+
+/* Detalles y contenido */
+.home__overview {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.home__overview h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--clr-black);
+}
+
+.home__overview-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--clr-blue);
+  margin-bottom: 12px;
+  padding: 0 12px;  /* Añadido padding horizontal */
+
+}
+
+.home__buttons {
+  display: flex;
+  justify-content: space-between; /* Coloca los botones en los extremos */
+  align-items: center; /* Asegura la alineación vertical */
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  margin-top: 16px; /* Ajusta el espaciado superior */
+  gap: 16px; /* Espaciado opcional entre botones */
+}
+
+.home__buy {
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  color: var(--clr-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 198, 255, 0.2);
+  text-align: center;
+  flex: 1; /* Proporción del botón en el espacio */
+  max-width: 200px; /* Ancho máximo opcional */
+}  /* Asegura que tome todo el ancho disponible */
+
+
+.home__buy:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 198, 255, 0.3);
+}
+
+.home__contact {
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--clr-blue);
+  border: 2px solid var(--clr-blue);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  flex: 1; /* Proporción del botón en el espacio */
+  max-width: 200px; /* Ancho máximo opcional */
+}
+
+.home__contact:hover {
+  background: var(--clr-blue);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 198, 255, 0.2);
+}
+
+.home__overview h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--clr-black);
+  margin: 24px 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.home__overview h2::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--gradient-primary);
+}
+
+.home__overview p {
+  color: var(--clr-grey);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+.home__overview ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+  list-style: none;
+}
+
+.home__overview ul li {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.home__overview ul li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: var(--clr-blue);
+}
+
+.home__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background: white;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.home__close:hover {
+  transform: rotate(90deg);
+  background: #f3f4f6;
+}
+
+/* Animaciones */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Media queries */
 @media screen and (max-width: 1024px) {
   .cards__grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+  }
+  
+  .home__details {
+    max-width: 90%;
   }
 }
 
 @media screen and (max-width: 768px) {
-  nav {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 1rem;
-    }
-    
-    .nav__links {
-      display: none;
-    }
-    
-    .header__title {
-    font-size: 2em;
+  .nav__links {
+    display: none;
   }
-
-        .stats {
-          flex-direction: column;
-          gap: 2rem;
-        }
-    
-        .search {
-          flex-direction: column;
-        }
-
-                .featured__properties h3 {
-                  font-size: 2em;
-                }
-}
-
-@media screen and (max-width: 640px) {
-  .cards__grid {
+  
+  .home__image {
+    height: 250px;
+  }
+  
+  .home__overview ul {
     grid-template-columns: 1fr;
-    padding: 0 1rem;
   }
-                .home__details {
-                  width: 95%;
-                  margin: 10px;
-                }
+  
+  .home__buttons {
+    flex-direction: column;
+  }
 }
 
 @media screen and (max-width: 480px) {
-  .nav__brand img {
-    max-width: 100px;
-  .nav__brand h1 {
-      font-size: 1.8em;
-    }
-  
-    .nav__connect {
-      width: 140px;
-      font-size: 1em;
-    }
-
-  .featured__properties {
-    padding: 2rem 0;
+  .home {
+    padding: 0;
   }
 
-        .featured__properties h3 {
-    font-size: 1.8em;
+  .home__details {
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .home__image {
+    height: 200px;
+  }
+
+  .home__overview {
+    padding: 16px;
+  }
+
+  .home__overview h1 {
+    font-size: 1.3rem;
+  }
   
+  .home__buy,
+  .home__contact {
+    padding: 10px 16px;
+  }
 }
-        }
-    }
