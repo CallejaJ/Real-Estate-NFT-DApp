@@ -7,8 +7,8 @@ import Search from './components/Search';
 import Home from './components/Home';
 
 // ABIs
-import RealEstate from './abis/RealEstate.json';
-import Escrow from './abis/Escrow.json';
+import RealEstate from './abis/RealEstate.json'
+import Escrow from './abis/Escrow.json'
 
 // Config
 import config from './config.json';
@@ -18,49 +18,18 @@ function App() {
   const [escrow, setEscrow] = useState(null);
   const [account, setAccount] = useState(null);
   const [homes, setHomes] = useState([]);
-  const [home, setHome] = useState(null);
-  const [network, setNetwork] = useState(null);
+  const [home, setHome] = useState({});
   const [toggle, setToggle] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const togglePop = (home) => {
-    setHome(home);
-    setToggle(!toggle);
-  };
 
   const loadBlockchainData = async () => {
     setIsLoading(true);
-    setError(null);
-
     try {
-      if (!window.ethereum) {
-        throw new Error('Please install MetaMask!');
-      }
-
-      // Connect to blockchain
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       setProvider(provider);
-
-      // Get network
       const network = await provider.getNetwork();
-      setNetwork(network);
 
-      // Get contract instances
-      const realEstate = new ethers.Contract(
-        config[network.chainId].realEstate.address,
-        RealEstate,
-        provider
-      );
-
-      const escrow = new ethers.Contract(
-        config[network.chainId].escrow.address,
-        Escrow,
-        provider
-      );
-      setEscrow(escrow);
-
-      // Load homes
+      const realEstate = new ethers.Contract(config[network.chainId].realEstate.address, RealEstate, provider);
       const totalSupply = await realEstate.totalSupply();
       const homes = [];
 
@@ -73,14 +42,18 @@ function App() {
 
       setHomes(homes);
 
-      // Get account
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const account = ethers.utils.getAddress(accounts[0]);
-      setAccount(account);
+      const escrow = new ethers.Contract(config[network.chainId].escrow.address, Escrow, provider);
+      setEscrow(escrow);
+
+      // Obtener la cuenta actual si existe
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts.length > 0) {
+        const account = ethers.utils.getAddress(accounts[0]);
+        setAccount(account);
+      }
 
     } catch (error) {
       console.error('Error loading blockchain data:', error);
-      setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -89,11 +62,15 @@ function App() {
   useEffect(() => {
     loadBlockchainData();
 
+    // Manejadores de eventos de MetaMask
     if (window.ethereum) {
-      window.ethereum.on('accountsChanged', async () => {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const account = ethers.utils.getAddress(accounts[0]);
-        setAccount(account);
+      window.ethereum.on('accountsChanged', async (accounts) => {
+        if (accounts.length > 0) {
+          const account = ethers.utils.getAddress(accounts[0]);
+          setAccount(account);
+        } else {
+          setAccount(null);
+        }
       });
 
       window.ethereum.on('chainChanged', () => {
@@ -101,6 +78,7 @@ function App() {
       });
     }
 
+    // Limpieza de eventos
     return () => {
       if (window.ethereum) {
         window.ethereum.removeListener('accountsChanged', () => { });
@@ -108,6 +86,16 @@ function App() {
       }
     };
   }, []);
+
+  // Debug: Monitorear cambios en la cuenta
+  useEffect(() => {
+    console.log('Current account:', account);
+  }, [account]);
+
+  const togglePop = (home) => {
+    setHome(home);
+    setToggle(!toggle);
+  };
 
   return (
     <div>
@@ -137,12 +125,6 @@ function App() {
         </header>
 
         <main>
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
-
           <section className="featured__properties">
             {isLoading ? (
               <div className="loading">
@@ -198,6 +180,7 @@ function App() {
         <Home
           home={home}
           provider={provider}
+          account={account} // Añadimos la cuenta aquí
           escrow={escrow}
           togglePop={togglePop}
         />
