@@ -81,22 +81,34 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
 
     const buyHandler = async () => {
         try {
-            const escrowAmount = await escrow.escrowAmount(home.id)
             const signer = await provider.getSigner()
+            const address = await signer.getAddress()
+            console.log('Dirección del comprador:', address)
 
-            // Buyer deposit earnest
-            let transaction = await escrow.connect(signer).depositEarnest(home.id, { value: escrowAmount })
+            const escrowAmount = await escrow.escrowAmount(home.id)
+            console.log('Monto del depósito:', ethers.utils.formatEther(escrowAmount), 'ETH')
+
+            // Verificar el balance
+            const balance = await provider.getBalance(address)
+            console.log('Balance disponible:', ethers.utils.formatEther(balance), 'ETH')
+
+            console.log('Iniciando depósito...')
+            let transaction = await escrow.connect(signer).depositEarnest(home.id, {
+                value: escrowAmount,
+                gasLimit: 1000000
+            })
+
+            console.log('Transacción enviada:', transaction.hash)
             await transaction.wait()
 
-            // Buyer approves...
+            console.log('Aprobando venta...')
             transaction = await escrow.connect(signer).approveSale(home.id)
             await transaction.wait()
 
             setHasBought(true)
-            setError(null)
         } catch (error) {
-            console.error('Error in buy transaction:', error)
-            setError('Error processing purchase')
+            console.error('Error completo:', error)
+            setError(error.message || 'Error en la transacción')
         }
     }
 
@@ -244,8 +256,37 @@ const Home = ({ home, provider, account, escrow, togglePop }) => {
                             Please connect your wallet to interact
                         </div>
                     ) : owner ? (
-                        <div className="home__owned">
-                            Owned by {owner.slice(0, 6) + "..." + owner.slice(38, 42)}
+                            <div className="home__owned" style={{
+                                backgroundColor: '#f8f9fa',
+                                border: '1px solid #e9ecef',
+                                borderRadius: '8px',
+                                padding: '12px 16px',
+                                margin: '15px 0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                fontSize: '14px',
+                                color: '#495057'
+                            }}>
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    style={{ color: '#2196F3' }}
+                                >
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                </svg>
+                                Owner: <span style={{
+                                    fontFamily: 'monospace',
+                                    backgroundColor: '#e9ecef',
+                                    padding: '2px 6px',
+                                    borderRadius: '4px',
+                                    marginLeft: '4px'
+                                }}>{owner.slice(0, 6) + "..." + owner.slice(38, 42)}</span>
                         </div>
                     ) : (
                         <div className="home__buttons">
